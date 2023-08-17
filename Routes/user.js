@@ -1,37 +1,38 @@
 import express, { response } from "express";
 import { User, generateToken } from "../models/users.js";
 import bcrypt from "bcrypt";
+import { Cart } from "../models/carts.js";
 
 const router = express.Router();
 
-//signup a user to the website
-router.post("/signup", async (req, res) =>{
-    try{
-        //find user already registered
-        let user = await User.findOne({ email: req.body.email});
-        if(user)
-        {
-            return res.status(400).send({error:"Email Already Exists"});
+// Signup a user to the website
+router.post("/signup", async (req, res) => {
+    try {
+        // Find if the user is already registered
+        let user = await User.findOne({ email: req.body.email });
+        if (user) {
+            return res.status(400).send({ error: "Email Already Exists" });
         }
 
-        //hash the password
+        // Hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-        // add the user to the database
-        user= await new User({...req.body, password: hashedPassword}).save();
+        // Add the user to the database
+        user = await new User({ ...req.body, password: hashedPassword }).save();
 
-        //generate a token and give it as a response
+        // Create a new cart for the user
+        const cart = await Cart.create({ user: user._id });
+
+        // Generate a token and give it as a response
         const token = generateToken(user._id);
-        res.status(201).send({ message: "Successfully Created", token});
-    }
-    catch(error)
-    {
-        //error handling
+        res.status(201).send({ message: "Successfully Created", token });
+    } catch (error) {
+        // Error handling
         console.log(error);
-        res.status(500).send({ error: "Internal Server error"});
+        res.status(500).send({ error: "Internal Server Error" });
     }
-})
+});
 
 // login a user to the website
 
@@ -66,5 +67,17 @@ router.post("/login", async (req, res) =>{
         res.status(500).send({ error:"Internal Server Error"});
     }
 })
+
+
+// Get all users
+router.get('/all', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 export const userRouter = router;
