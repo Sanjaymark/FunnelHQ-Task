@@ -24,19 +24,27 @@ router.get('/:userId', async (req, res) => {
 
 
 // Add an item to the logged-in user's cart
-router.post('/add', async (req, res) => {
+router.post('/add/:productId', async (req, res) => {
     try {
         const loggedInUserId = req.user._id; // Get user ID from the authenticated middleware
-        const { product, quantity } = req.body;
+        const productId   = req.params.productId;
+        const Quantity = req.body.quantity;
 
-        const addedProduct = await Product.findById(product);
+        console.log("UserId:", loggedInUserId);
+
+        const addedProduct = await Product.findById({ _id : productId});
+
+
         if (!addedProduct) {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        const newItem = await CartItem.create({ product, quantity });
+        const newItem = await CartItem.create({ product: productId, quantity: Quantity });
+
 
         let loggedInUserCart = await Cart.findOne({ user: loggedInUserId });
+
+        console.log("UserCart:", loggedInUserCart)
         if (!loggedInUserCart) {
             loggedInUserCart = await Cart.create({ user: loggedInUserId, items: [newItem] });
         } else {
@@ -45,7 +53,7 @@ router.post('/add', async (req, res) => {
 
         await loggedInUserCart.save();
 
-        res.status(201).json({message : "Item added to cart Successfully"});
+        res.status(201).json({ message: "Item added to cart successfully" });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
