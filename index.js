@@ -26,7 +26,7 @@ app.use(express.json());
 
 //Routes
 app.use("/user", userRouter);
-app.use("/products", isAuthenticated, ProductRouter);
+app.use("/products", ProductRouter);
 app.use("/cart", isAuthenticated, CartRouter);
 app.use("/order", isAuthenticated, OrderRouter);
 
