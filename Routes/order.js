@@ -66,7 +66,7 @@ router.get('/my-orders', async (req, res) => {
             const populatedItems = await Promise.all(order.items.map(async (item) => {
                 const populatedProduct = await item.product.populate('product').execPopulate();
                 return {
-                    product: populatedProduct.product,
+                    product: populatedProduct,
                     quantity: item.quantity,
                     Price: item.Price
                 };
@@ -88,6 +88,7 @@ router.get('/my-orders', async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
+
 
 
 
