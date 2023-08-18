@@ -7,8 +7,8 @@ export const isAuthenticated = async (req,res, next) =>{
     if(req.headers){
         try{
             token = await req.headers["x-auth-token"];
-            const decode = jwt.verify(token, process.env.SECRET_Key);
-            console.log(decode);
+            const decode = jwt.verify(token, process.env.SECRET_KEY);
+            console.log("decode:", decode);
             req.user = await User.findById(decode.id).select("-password");
             next();
         }

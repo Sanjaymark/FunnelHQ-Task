@@ -30,8 +30,6 @@ router.post('/add/:productId', async (req, res) => {
         const productId   = req.params.productId;
         const Quantity = req.body.quantity;
 
-        console.log("UserId:", loggedInUserId);
-
         const addedProduct = await Product.findById({ _id : productId});
 
 
@@ -44,7 +42,6 @@ router.post('/add/:productId', async (req, res) => {
 
         let loggedInUserCart = await Cart.findOne({ user: loggedInUserId });
 
-        console.log("UserCart:", loggedInUserCart)
         if (!loggedInUserCart) {
             loggedInUserCart = await Cart.create({ user: loggedInUserId, items: [newItem] });
         } else {
