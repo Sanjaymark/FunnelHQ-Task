@@ -53,41 +53,21 @@ router.post('/place-order/:productId', async (req, res) => {
 });
 
 
-// Get all orders for the logged-in user
 router.get('/my-orders', async (req, res) => {
     try {
         const loggedInUserId = req.user._id; // Get user ID from the authenticated middleware
 
         // Find all orders for the logged-in user
         const userOrders = await Order.find({ user: loggedInUserId })
-            .sort({ orderDate: -1 }); // Sort orders by orderDate in descending order
+            .populate('items.product') // Populate the product field in items
+            .sort({ orderDate: -1 });
 
-        const populatedOrders = await Promise.all(userOrders.map(async (order) => {
-            const populatedItems = await Promise.all(order.items.map(async (item) => {
-                const populatedProduct = await item.product.populate('product').execPopulate();
-                return {
-                    product: populatedProduct,
-                    quantity: item.quantity,
-                    Price: item.Price
-                };
-            }));
-
-            return {
-                _id: order._id,
-                cart: order.cart,
-                user: order.user,
-                totalAmount: order.totalAmount,
-                orderDate: order.orderDate,
-                status: order.status,
-                items: populatedItems
-            };
-        }));
-
-        res.status(200).json(populatedOrders);
+        res.status(200).json(userOrders);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
+
 
 
 
