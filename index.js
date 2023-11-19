@@ -7,6 +7,7 @@ import { isAuthenticated } from "./Authentication/auth.js";
 import { CartRouter } from "./Routes/cart.js";
 import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
+import { adminRouter } from "./Routes/admin.js";
 
 
 //configure env
@@ -26,9 +27,10 @@ app.use(express.json());
 
 //Routes
 app.use("/user", userRouter);
+app.use("/admin", adminRouter);
 app.use("/products", ProductRouter);
 app.use("/cart", isAuthenticated, CartRouter);
-app.use("/order", isAuthenticated, OrderRouter);
+app.use("/order", OrderRouter);
 
 //start Listening
 app.listen(PORT, ()=>console.log(`server started in localhost:${PORT}`));

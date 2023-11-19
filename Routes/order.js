@@ -1,16 +1,17 @@
 import express from "express";
 import { UserOrder, Order } from "../models/orders.js"; // Assuming you have the appropriate models
 import { Cart } from "../models/carts.js";
+import { isAdmin, isAuthenticated } from "../Authentication/auth.js";
 
 const router = express.Router();
 
 
 
 // Place an order for a single product for the logged-in user
-router.post('/place-order/:productId', async (req, res) => {
+router.post('/place-order/:cartId', isAuthenticated, async (req, res) => {
     try {
         const loggedInUserId = req.user._id; // Get user ID from the authenticated middleware
-        const productId = req.params.productId;
+        const cartId = req.params.cartId;
 
         // Find the user's cart and populate the items
         const userCart = await Cart.findOne({ user: loggedInUserId }).populate('items.product');
@@ -19,7 +20,7 @@ router.post('/place-order/:productId', async (req, res) => {
         }
 
         // Find the selected cart item for the specified product
-        const selectedCartItem = userCart.items.find(item => item.product._id.toString() === productId);
+        const selectedCartItem = userCart.items.find(item => item._id.toString() === cartId);
         if (!selectedCartItem) {
             return res.status(404).json({ message: "Selected product not found in cart" });
         }
@@ -43,7 +44,7 @@ router.post('/place-order/:productId', async (req, res) => {
         });
 
         // Remove the selected product's cart item from the user's cart
-        userCart.items = userCart.items.filter(item => item.product._id.toString() !== productId);
+        userCart.items = userCart.items.filter(item => item._id.toString() !== cartId);
         await userCart.save();
 
         res.status(201).json({ message: "Order placed successfully", order: newOrder });
@@ -53,10 +54,11 @@ router.post('/place-order/:productId', async (req, res) => {
 });
 
 
-router.get('/my-orders', async (req, res) => {
+router.get('/my-orders', isAuthenticated, async (req, res) => {
     try {
         const loggedInUserId = req.user._id; // Get user ID from the authenticated middleware
 
+        console.log(loggedInUserId)
         // Find all orders for the logged-in user
         const userOrders = await Order.find({ user: loggedInUserId })
             .populate('items.product') // Populate the product field in items
@@ -75,7 +77,7 @@ router.get('/my-orders', async (req, res) => {
 
 
 // Update order status by order ID
-router.patch('/update-status/:orderId', async (req, res) => {
+router.patch('/update-status/:orderId',isAdmin, async (req, res) => {
     try {
         const loggedInUserId = req.user._id; // Get user ID from the authenticated middleware
         const orderId = req.params.orderId;

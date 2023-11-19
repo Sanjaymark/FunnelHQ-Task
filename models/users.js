@@ -8,22 +8,24 @@ const userSchema = new mongoose.Schema(
         name : {
             type:String,
             required:true,
-            trim:true,
-            maxlength:32
         },
         email :{
             type:String,
             required:true,
             unique:true,
-            trim:true
         },
-        contact:{
-            type:Number
-        },
+        
         password:{
             type:String,
             required:true
+        },
+        token:{
+            type: String
+        },joinedOn: {
+            type: Date,
+            default: Date.now()
         }
+        
     }
 )
 

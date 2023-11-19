@@ -1,12 +1,13 @@
 import express from "express";
 import { Product } from "../models/products.js";
+import { isAdmin } from "../Authentication/auth.js";
 
 
 const router = express.Router();
 
 
 // Create a new product
-router.post('/add', async (req, res) => {
+router.post('/add',isAdmin, async (req, res) => {
     try {
         const newProduct = await Product.create(req.body);
         res.status(201).json(newProduct);
@@ -39,7 +40,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update a product by ID
-router.put('/edit/:id', async (req, res) => {
+router.put('/edit/:id',isAdmin, async (req, res) => {
     try {
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedProduct) {
@@ -52,7 +53,7 @@ router.put('/edit/:id', async (req, res) => {
 });
 
 // Delete a product by ID
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id',isAdmin, async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
         if (!deletedProduct) {
@@ -80,5 +81,9 @@ router.get('/category/:category', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+
+
+
 
 export const ProductRouter = router;
