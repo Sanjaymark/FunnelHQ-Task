@@ -28,16 +28,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+// Use session middleware
+app.use(session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+  }));
+
+  
+
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Use session middleware
-app.use(session({
-  secret: sessionSecret,
-  resave: false,
-  saveUninitialized: true,
-}));
+
 
 // Routes
 app.use("/user", userRouter);
