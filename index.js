@@ -9,7 +9,7 @@ import { CartRouter } from "./Routes/cart.js";
 import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
-import passport from 'passport';
+import passport, { session } from 'passport';
 import { passportRouter } from "./Routes/passports.js"; // Import passportRouter and sessionSecret from passport.js
 import { sessionSecret } from "./Controllers/passport.js";
 import { Session } from 'express-session';
@@ -34,7 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Use session middleware
-app.use(Session({
+app.use(session({
   secret: sessionSecret,
   resave: false,
   saveUninitialized: true,
