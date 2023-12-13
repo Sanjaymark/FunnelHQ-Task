@@ -6,7 +6,7 @@ export function dbConnection() {
         useUnifiedTopology: true,
     };
     try {
-        mongoose.connect("mongodb+srv://Sanjay:Sr3125104@cluster0.qc7mipk.mongodb.net/E-commerce", params);
+        mongoose.connect("mongodb+srv://Sanjay:Sr3125104@cluster0.qc7mipk.mongodb.net/funnel", params);
         console.log("Database connected Successfully");
     } catch (error) {
         console.log("Error connecting DB", error);

@@ -1,5 +1,5 @@
 import express from "express";
-import { UserOrder, Order } from "../models/orders.js"; // Assuming you have the appropriate models
+import { Order } from "../models/orders.js"; // Assuming you have the appropriate models
 import { Cart } from "../models/carts.js";
 import { isAdmin, isAuthenticated } from "../Authentication/auth.js";
 

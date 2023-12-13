@@ -1,36 +1,45 @@
+// index.js
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import {dbConnection} from "./db.js";
-import {userRouter} from "./Routes/user.js"
+import { dbConnection } from "./db.js";
+import { userRouter } from "./Routes/user.js";
 import { isAuthenticated } from "./Authentication/auth.js";
 import { CartRouter } from "./Routes/cart.js";
 import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
+import passport from 'passport';
+import { passportRouter } from "./Routes/passport.js"; // Import passportRouter from passport.js
 
-
-//configure env
+// Configure env
 dotenv.config();
 
-//DB Connection
+// DB Connection
 dbConnection();
 
 const PORT = process.env.PORT;
 
-//iniitalizing server
+// Initialize server
 const app = express();
 
-//middlewares
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-//Routes
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Routes
 app.use("/user", userRouter);
 app.use("/admin", adminRouter);
 app.use("/products", ProductRouter);
 app.use("/cart", isAuthenticated, CartRouter);
 app.use("/order", OrderRouter);
 
-//start Listening
-app.listen(PORT, ()=>console.log(`server started in localhost:${PORT}`));
+// Use passportRouter
+app.use(passportRouter); // Add this line to include the Passport.js routes
+
+// Start Listening
+app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
