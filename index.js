@@ -9,9 +9,9 @@ import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
 import passport from 'passport';
-import { passportRouter } from "./Routes/passports.js"; // Import passportRouter and sessionSecret from passport.js
+import session from "express-session"; // Import session here
+import { passportRouter } from "./Routes/passports.js";
 import { sessionSecret } from "./Controllers/passport.js";
-import session from "express-session";
 
 // Configure env
 dotenv.config();
@@ -47,7 +47,7 @@ app.use("/cart", isAuthenticated, CartRouter);
 app.use("/order", OrderRouter);
 
 // Use passportRouter
-app.use(passportRouter); // Add this line to include the Passport.js routes
+app.use(passportRouter);
 
 // Start Listening
 app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
