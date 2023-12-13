@@ -10,7 +10,7 @@ import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
 import passport from 'passport';
-import { passportRouter } from "./Routes/passport.js"; // Import passportRouter from passport.js
+import { passportRouter, sessionSecret } from "./Routes/passport.js"; // Import passportRouter and sessionSecret from passport.js
 
 // Configure env
 dotenv.config();
@@ -30,6 +30,13 @@ app.use(express.json());
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Use session middleware
+app.use(session({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // Routes
 app.use("/user", userRouter);
