@@ -12,6 +12,7 @@ import { adminRouter } from "./Routes/admin.js";
 import passport from 'passport';
 import { passportRouter } from "./Routes/passports.js"; // Import passportRouter and sessionSecret from passport.js
 import { sessionSecret } from "./Controllers/passport.js";
+import { Session } from 'express-session';
 
 // Configure env
 dotenv.config();
@@ -33,7 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Use session middleware
-app.use(session({
+app.use(Session({
   secret: sessionSecret,
   resave: false,
   saveUninitialized: true,
