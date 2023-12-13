@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import mongoose from "mongoose";
-
+import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import cors from "cors";
 import { dbConnection } from "./db.js";
@@ -14,8 +14,6 @@ import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
 import { passportRouter } from "./Routes/passports.js";
 import { sessionSecret } from "./Controllers/passport.js";
-import { ConnectMongoOptions } from "connect-mongo/build/main/lib/MongoStore.js";
-
 
 dotenv.config();
 
@@ -25,7 +23,7 @@ dbConnection();
 const PORT = process.env.PORT;
 const app = express();
 
-const MongoStore = ConnectMongoOptions(session);
+
 
 // Middlewares
 app.use(cors());
@@ -36,7 +34,7 @@ app.use(session({
   secret: sessionSecret,
   resave: false,
   saveUninitialized: true,
-  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  store: MongoStore.create({ mongooseConnection: mongoose.connection }),
 }));
 
 // Passport middleware
