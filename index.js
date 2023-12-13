@@ -35,7 +35,7 @@ app.use(session({
   secret: sessionSecret,
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create({ mongooseConnection: mongoose.connection }),
+  store: new MongoStore.create({ mongooseConnection: mongoose.connection }),
 }));
 
 // Passport middleware
