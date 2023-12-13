@@ -11,6 +11,7 @@ import { adminRouter } from "./Routes/admin.js";
 import passport from 'passport';
 import { passportRouter } from "./Routes/passports.js"; // Import passportRouter and sessionSecret from passport.js
 import { sessionSecret } from "./Controllers/passport.js";
+import session from "express-session";
 
 // Configure env
 dotenv.config();
