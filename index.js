@@ -10,7 +10,7 @@ import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
 import passport from 'passport';
-import { passportRouter } from "./Routes/passport.js"; // Import passportRouter and sessionSecret from passport.js
+import { passportRouter } from "./Routes/passports.js"; // Import passportRouter and sessionSecret from passport.js
 import { sessionSecret } from "./Controllers/passport.js";
 
 // Configure env
