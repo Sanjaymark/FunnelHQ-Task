@@ -1,7 +1,7 @@
 import express, { response } from "express";
 import { User, generateToken } from "../models/users.js";
 import { verifyToken } from "../models/verifyUser.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs"
 import { Cart } from "../models/carts.js";
 import { VerifyUser } from "../models/verifyUser.js";
 import { sendEmail } from "../Controllers/mail.js";

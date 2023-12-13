@@ -1,5 +1,5 @@
 import express, { response } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 ;
 import { Admin, generateToken } from "../models/admin.js";
 
