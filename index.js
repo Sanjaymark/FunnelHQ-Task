@@ -1,4 +1,3 @@
-// index.js
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -9,10 +8,9 @@ import { CartRouter } from "./Routes/cart.js";
 import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
-import passport, { session } from 'passport';
+import passport from 'passport';
 import { passportRouter } from "./Routes/passports.js"; // Import passportRouter and sessionSecret from passport.js
 import { sessionSecret } from "./Controllers/passport.js";
-import { Session } from 'express-session';
 
 // Configure env
 dotenv.config();
