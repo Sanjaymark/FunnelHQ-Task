@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import mongoose from "mongoose";
-import connectMongo from "connect-mongo";
+import connectMongo from "connect-mongo"
 import dotenv from "dotenv";
 import cors from "cors";
 import { dbConnection } from "./db.js";
