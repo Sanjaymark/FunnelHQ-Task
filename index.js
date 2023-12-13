@@ -24,7 +24,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 // Set up MongoDB session store with connect-mongo
-const MongoStore = connectMongo(session);
+const MongoStore = new connectMongo(session);
 
 // Middlewares
 app.use(cors());
@@ -35,7 +35,7 @@ app.use(session({
   secret: sessionSecret,
   resave: false,
   saveUninitialized: true,
-  store: new MongoStore.create({ mongooseConnection: mongoose.connection }),
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
 }));
 
 // Passport middleware
