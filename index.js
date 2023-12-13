@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import mongoose from "mongoose";
-import connectMongo from "connect-mongo"
+import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import cors from "cors";
 import { dbConnection } from "./db.js";
@@ -15,6 +15,7 @@ import { adminRouter } from "./Routes/admin.js";
 import { passportRouter } from "./Routes/passports.js";
 import { sessionSecret } from "./Controllers/passport.js";
 
+
 dotenv.config();
 
 // DB Connection
@@ -23,8 +24,6 @@ dbConnection();
 const PORT = process.env.PORT;
 const app = express();
 
-// Set up MongoDB session store with connect-mongo
-const MongoStore = new connectMongo(session);
 
 // Middlewares
 app.use(cors());
