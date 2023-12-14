@@ -7,7 +7,7 @@ import { User } from '../models/users.js';
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: "/auth/google/callback",
+  callbackURL: "https://funnel-jeg7.onrender.com/auth/google/callback",
 },
 (accessToken, refreshToken, profile, done) => {
   User.findOne({ googleId: profile.id }, (err, existingUser) => {
