@@ -51,7 +51,7 @@ app.use("/admin", adminRouter);
 app.use("/products", ProductRouter);
 app.use("/cart", isAuthenticated, CartRouter);
 app.use("/order", OrderRouter);
-app.use("/", passportRouter);
+app.use("/auth", passportRouter);
 
 // Start Listening
 app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
