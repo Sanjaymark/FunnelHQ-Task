@@ -3,44 +3,33 @@ import passport from "passport";
 
 const router = express.Router();
 
-// Route to initiate Google OAuth authentication
-router.get("/auth/google", (req, res, next) => {
-   
-    // Start Google OAuth authentication
-    passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
-
-  }, (err, req, res, next) => {
-
-    // Handle authentication error
-    console.error(err);
-    res.status(500).json({ error: "Authentication Error" });
-  }
-);
-
-// Route to handle the callback from Google OAuth
-router.get("/auth/google/callback", (req, res, next) => {
-    
-    // Authenticate with Google and handle failure
-    passport.authenticate("google", { failureRedirect: "/" })(req, res, next);
-    
-  }, (err, req, res, next) => {
-  
-    // Handle authentication callback error
-    console.error(err);
-    res.status(500).json({ error: "Authentication Callback Error" });
-
-  }, (req, res) => {
-    
-    // Successful authentication, redirect home or handle as needed
-    res.redirect("/");
-
-  }
-);
-
-// Route to access user details
-router.get("/", (req, res) => {
-  // Access user details through req.user
-  res.send(req.user);
+router.get("/login/success", (req, res) => {
+	if (req.user) {
+		res.status(200).json({
+			error: false,
+			message: "Successfully Loged In",
+			user: req.user,
+		});
+	} else {
+		res.status(403).json({ error: true, message: "Not Authorized" });
+	}
 });
+
+router.get("/login/failed", (req, res) => {
+	res.status(401).json({
+		error: true,
+		message: "Log in failure",
+	});
+});
+
+router.get("/google", passport.authenticate("google", ["profile", "email"]));
+
+router.get(
+	"/google/callback",
+	passport.authenticate("google", {
+		successRedirect: process.env.CLIENT_URL,
+		failureRedirect: "/login/failed",
+	})
+);
 
 export const passportRouter = router;

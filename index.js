@@ -1,10 +1,8 @@
 import express from "express";
-import session from "express-session";
 import passport from "passport";
-import mongoose from "mongoose";
-import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieSession from "cookie-session";
 import { dbConnection } from "./db.js";
 import { userRouter } from "./Routes/user.js";
 import { isAuthenticated } from "./Authentication/auth.js";
@@ -13,7 +11,7 @@ import { ProductRouter } from "./Routes/product.js";
 import { OrderRouter } from "./Routes/order.js";
 import { adminRouter } from "./Routes/admin.js";
 import { passportRouter } from "./Routes/passports.js";
-import { sessionSecret } from "./Controllers/passport.js";
+
 
 dotenv.config();
 
@@ -23,23 +21,29 @@ dbConnection();
 const PORT = process.env.PORT;
 const app = express();
 
-
-
-// Middlewares
-app.use(cors());
-app.use(express.json());
-
-// Session middleware with MongoDB store
-app.use(session({
-  secret: sessionSecret,
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({ mongooseConnection: mongoose.connection }),
-}));
+app.use(
+	cookieSession({
+		name: "session",
+		keys: ["cyberwolve"],
+		maxAge: 24 * 60 * 60 * 100,
+	})
+);
 
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+// Middlewares
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true,
+}));
+
+
+app.use(express.json());
+
 
 // Routes
 app.use("/user", userRouter);

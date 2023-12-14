@@ -1,19 +1,13 @@
-// passport.js
+
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { User } from '../models/users.js';
 
-// Function to generate a random session secret
-const generateSessionSecret = () => {
-  return 'your-secret-key-' + Math.random().toString(36).substring(7);
-};
-
-const sessionSecret = generateSessionSecret();
 
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: process.env.CALLBACK_URL,
+  callbackURL: "/auth/google/callback",
 },
 (accessToken, refreshToken, profile, done) => {
   User.findOne({ googleId: profile.id }, (err, existingUser) => {
@@ -56,5 +50,3 @@ passport.deserializeUser((id, done) => {
     done(err, user);
   });
 });
-
-export { sessionSecret };
